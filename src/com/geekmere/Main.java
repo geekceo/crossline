@@ -17,14 +17,9 @@ public class Main {
 
     private static void input()
     {
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-        });
         Scanner scan = new Scanner(System.in);
         System.out.print(user_set.main_line);
-        String comm = scan.next();
+        String comm = scan.nextLine();
         Handler.comm_handler(comm);
     }
 
@@ -33,22 +28,5 @@ public class Main {
         System.out.println(out);
     }
 
-    private static void formKeyPressed(java.awt.event.KeyEvent evt) {
-        switch (evt.getKeyCode()) {
-
-            case KeyEvent.VK_UP:
-                Scanner scan = new Scanner(System.in);
-                System.out.print(user_set.main_line);
-                String comm = scan.next(user_set.last_comm);
-                Handler.comm_handler(comm);
-                break;
-
-            case KeyEvent.VK_DOWN:
-
-                break;
-
-            default:
-        }
-    }
 
 }

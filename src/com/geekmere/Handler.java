@@ -7,10 +7,23 @@ public class Handler
 {
     public static void comm_handler(String comm)
     {
-        if (comm.equals("help"))
+        ArrayList<String> args = args_finder(comm);
+
+        if (comm.contains("help"))
         {
-            Main.output("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020");
-            user_set.last_comm = "help";
+            if (comm.equals("help"))
+            {
+                Main.output("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020");
+                user_set.last_comm = "help";
+            }
+            else
+            {
+                if (args.contains("-p"))
+                {
+                    Main.output("Person - Tagir Khalilov\n(c) GeeMere 2016-2020");
+                    user_set.last_comm = "help";
+                }
+            }
         }
 
         if (comm.equals("clear"))
@@ -33,21 +46,38 @@ public class Handler
         }
     }
 
-    public static void args_finder(String request)
+    public static ArrayList<String> args_finder(String request)
     {
-        ArrayList<Integer> indexes = new ArrayList<Integer>();
-        ArrayList<String> args = new ArrayList<String>()
+        String arg;
+        char[] req_char = request.toCharArray();
+        ArrayList<String> args = new ArrayList<String>();
 
         for (int i = 0; i < request.length(); i++)
         {
+            arg = "";
             try
             {
-                if ()
+                if (req_char[i] == ' ' &&  req_char[i+1] != ' ')
+                {
+                    for (int j = i + 1; j < request.length(); j++)
+                    {
+                        if (req_char[j] == ' ')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            arg += req_char[j];
+                        }
+                    }
+                    args.add(arg);
+                }
             }
             catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
+        return args;
     }
 }

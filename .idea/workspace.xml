@@ -6,7 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f8ef55fb-9f61-41dc-9b9d-ce599768f54c" name="Default Changelist" comment="" />
+    <list default="true" id="f8ef55fb-9f61-41dc-9b9d-ce599768f54c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/claus.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/CrossLine_jar/CrossLine.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/CrossLine_jar/CrossLine.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/geekmere/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/geekmere/Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/geekmere/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/geekmere/Main.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,13 +26,18 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1aP7ak0U3bsllfCD122AoinsRx2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -41,6 +53,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -72,6 +89,22 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="411" y="170" width="525" height="425" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1586626374215" />
+    <state width="1320" height="185" key="GridCell.Tab.0.bottom" timestamp="1586714098506">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1320" height="185" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1586714098506" />
+    <state width="1320" height="185" key="GridCell.Tab.0.center" timestamp="1586714098505">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1320" height="185" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1586714098505" />
+    <state width="1320" height="185" key="GridCell.Tab.0.left" timestamp="1586714098505">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1320" height="185" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1586714098505" />
+    <state width="1320" height="185" key="GridCell.Tab.0.right" timestamp="1586714098506">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1320" height="185" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1586714098506" />
     <state x="166" y="0" width="1024" height="766" key="SettingsEditor" timestamp="1586626380113">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
