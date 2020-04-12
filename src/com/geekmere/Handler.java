@@ -5,20 +5,6 @@ import java.util.ArrayList;
 
 public class Handler
 {
-    /*
-    try {
-                            FileReader fr = new FileReader(user_set.set_path);
-                            BufferedReader reader = new BufferedReader(fr);
-                            String line = reader.readLine();
-                            while (line != null)
-                            {
-
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-    */
-
     public static void set_handler(String comm) throws IOException
     {
         boolean find = false;
@@ -29,13 +15,19 @@ public class Handler
         String line = reader.readLine();
         while (line != null)
         {
-            if (line.contains(comm))
+            char[] line_char = line.toCharArray();
+            String alias = "";
+            int index_sl = line.indexOf("/");
+            for (int i = 0; i < index_sl; i++)
+            {
+                alias += line_char[i];
+            }
+            if (alias.equals(comm))
             {
                 find = true;
-                char[] line_char = line.toCharArray();
-                for (int i = line.indexOf("/")+1; i < line.length(); i++)
+                for (int j = index_sl+1; j < line.length(); j++)
                 {
-                    f_comm += line_char[i];
+                    f_comm += line_char[j];
                 }
                 comm_handler(f_comm);
             }
@@ -43,7 +35,7 @@ public class Handler
         }
         reader.close();
         fr.close();
-        if (find == false)
+        if (!find)
         {
             comm_handler(comm);
         }
