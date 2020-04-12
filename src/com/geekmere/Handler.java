@@ -9,21 +9,40 @@ public class Handler
     {
         ArrayList<String> args = args_finder(comm);
 
+        if (comm.contains("alias"))
+        {
+            if (comm.equals("alias"))
+            {
+                Main.output("alias -arg", 0);
+            }
+            else
+            {
+                if (args.size() > 1)
+                {
+                    Main.output("alias: unknowns arguments", 1);
+                }
+                else
+                {
+                    System.out.println(args.get(0));
+                }
+            }
+            user_set.last_comm = comm;
+        }
+
         if (comm.contains("help"))
         {
             if (comm.equals("help"))
             {
-                Main.output("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020");
-                user_set.last_comm = "help";
+                Main.output("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020", 0);
             }
             else
             {
                 if (args.contains("-p"))
                 {
-                    Main.output("Person - Tagir Khalilov\n(c) GeeMere 2016-2020");
-                    user_set.last_comm = "help";
+                    Main.output("Person - Tagir Khalilov\n(c) GeeMere 2016-2020", 0);
                 }
             }
+            user_set.last_comm = comm;
         }
 
         if (comm.equals("clear"))
@@ -40,9 +59,9 @@ public class Handler
 
     public static void clear()
     {
-        for (int i = 0; i <= 255; i ++)
+        for (int i = 0; i <= 127; i ++)
         {
-            Main.output((char)8 + " " + (char)8);
+            Main.output((char)8 + " " + (char)8, 0);
         }
     }
 
