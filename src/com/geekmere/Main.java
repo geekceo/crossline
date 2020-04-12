@@ -23,7 +23,7 @@ public class Main
     public static void main(String[] args) throws IOException
     {
 
-        File set = new File(user_set.home_dir + "/cl_set.cfg");
+        File set = new File(user_set.set_path);
 
         if (!set.exists())
         {
@@ -36,12 +36,12 @@ public class Main
         }
     }
 
-    private static void input()
+    private static void input() throws IOException
     {
         Scanner scan = new Scanner(System.in);
         System.out.print(user_set.main_line);
         String comm = scan.nextLine();
-        Handler.comm_handler(comm);
+        Handler.set_handler(comm);
     }
 
     public static void output(String out, int code)
