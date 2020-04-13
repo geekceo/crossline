@@ -2,6 +2,7 @@ package com.geekmere;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Scanner;
 import java.io.File;
 
@@ -38,8 +39,8 @@ public class Main
 
     private static void input() throws IOException
     {
+        System.out.print(MessageFormat.format("@{0}:{1}#$ ", user_set.username, Handler.pwd));
         Scanner scan = new Scanner(System.in);
-        System.out.print(user_set.main_line);
         String comm = scan.nextLine();
         Handler.set_handler(comm);
     }

@@ -10,8 +10,13 @@ import java.nio.file.attribute.UserPrincipal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
+
+
 public class Handler
 {
+
+    public static String pwd = user_set.home_dir;
+
     public static void set_handler(String comm) throws IOException
     {
         boolean find = false;
@@ -48,6 +53,51 @@ public class Handler
         }
     }
 
+    public static String equal_tabs(File[] files, String curr_owner) throws IOException
+    {
+        int largest, diff;
+        String files_str, tabs = "", owner = "";
+
+        files_str = files[0].toString();
+        try
+        {
+            owner = Files.getOwner(Paths.get(files_str)).getName();
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        largest = owner.length();
+        for (int i = 0; i < files.length; i++)
+        {
+            files_str = files[i].toString();
+            try
+            {
+                owner = Files.getOwner(Paths.get(files_str)).getName();
+            }
+            catch (Exception e)
+            {
+
+            }
+            if (largest < owner.length())
+            {
+                largest = owner.length();
+            }
+        }
+        diff = largest - curr_owner.length();
+
+        if (diff != 0)
+        {
+            for (int i = 0; i < diff; i++)
+            {
+                tabs += " ";
+            }
+        }
+
+        return tabs;
+    }
+
     public static void comm_handler(String comm) throws IOException
     {
         String[] alias_log_exceptions =
@@ -71,17 +121,19 @@ public class Handler
 
         if (comm.contains("ls"))
         {
-            File dir = new File(user_set.pwd);
+            File dir = new File(pwd);
             File[] files = dir.listFiles();
             String files_str = "", files_list = "";
             File file;
-            String owner, read = "", write = "", exec = "";
+            int largest = 0, boof = 0;
+            String owner = "", read = "", write = "", exec = "";
             boolean checker;
 
             if (DiffOs.isWindows())
             {
-                if (comm.equals("ls"))
+                if (comm.equals("ls") && files != null)
                 {
+                    assert files != null;
                     for (int i = 0; i < files.length; i++)
                     {
                         checker = false;
@@ -116,7 +168,7 @@ public class Handler
                     }
                     else
                     {
-                        if (args.get(0).equals("-a"))
+                        if (args.get(0).equals("-a") && files != null)
                         {
                             for (int i = 0; i < files.length; i++)
                             {
@@ -142,9 +194,9 @@ public class Handler
                             output_stream.ous(files_list, 0);
                         }
 
-                        if (args.get(0).equals("-x"))
+                        if (args.get(0).equals("-x") && files != null)
                         {
-                            output_stream.ous("owner        type/mod        filename\n", 99);
+                            output_stream.ous("owner" + equal_tabs(files, owner) + "    type/mod        filename\n", 99);
                             for (int i = 0; i < files.length; i++)
                             {
                                 files_str = files[i].toString();
@@ -156,17 +208,18 @@ public class Handler
                                 if (Files.isWritable(Paths.get(files_str))){write="w";}else{write="-";}
                                 if (Files.isExecutable(Paths.get(files_str))){exec="x";}else{exec="-";}
 
+
                                 if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
                                 {
-                                    files_list += owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                    files_list += owner + equal_tabs(files, owner) + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
                                 }
                                 else if (file.isDirectory() && !file.isHidden())
                                 {
-                                    files_list += owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                    files_list += owner + equal_tabs(files, owner) + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
                                 }
                                 else
                                 {
-                                    files_list += owner + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
+                                    files_list += owner + equal_tabs(files, owner) + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
                                 }
 
                                 for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
@@ -174,11 +227,12 @@ public class Handler
                                     file = new File(files_str);
                                     if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
                                     {
-                                        files_list += files_str.toCharArray()[j] + Colors.RESET;
+                                        files_list += files_str.toCharArray()[j];
                                     }
                                     else if (file.isDirectory() && !file.isHidden())
                                     {
-                                        files_list += files_str.toCharArray()[j] + Colors.RESET;
+                                        files_list += files_str.toCharArray()[j]
+                                        ;
                                     }
                                     else
                                     {
@@ -194,7 +248,7 @@ public class Handler
             }
             else
             {
-                if (comm.equals("ls"))
+                if (comm.equals("ls") && files != null)
                 {
                     for (int i = 0; i < files.length; i++)
                     {
@@ -230,7 +284,7 @@ public class Handler
                     }
                     else
                     {
-                        if (args.get(0).equals("-a"))
+                        if (args.get(0).equals("-a") && files != null)
                         {
                             for (int i = 0; i < files.length; i++)
                             {
@@ -256,15 +310,23 @@ public class Handler
                             output_stream.ous(files_list, 0);
                         }
 
-                        if (args.get(0).equals("-x"))
+                        if (args.get(0).equals("-x") && files != null && files.length != 0)
                         {
-                            output_stream.ous("owner        type/mod        filename\n", 3);
+                            output_stream.ous("owner" + equal_tabs(files, owner) + "    type/mod        filename\n", 3);
                             for (int i = 0; i < files.length; i++)
                             {
                                 files_str = files[i].toString();
 
                                 file = new File(files_str);
-                                owner = Files.getOwner(Paths.get(files_str)).getName();
+                                try
+                                {
+                                    owner = Files.getOwner(Paths.get(files_str)).getName();
+                                }
+                                catch (Exception e)
+                                {
+
+                                }
+
 
                                 if (Files.isReadable(Paths.get(files_str))){read="r";}else{read="-";}
                                 if (Files.isWritable(Paths.get(files_str))){write="w";}else{write="-";}
@@ -272,15 +334,15 @@ public class Handler
 
                                 if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
                                 {
-                                    files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                    files_list += Colors.GREEN + owner + equal_tabs(files, owner) + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
                                 }
                                 else if (file.isDirectory() && !file.isHidden())
                                 {
-                                    files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                    files_list += Colors.GREEN + owner + equal_tabs(files, owner) + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
                                 }
                                 else
                                 {
-                                    files_list += Colors.GREEN + owner + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
+                                    files_list += Colors.GREEN + owner + equal_tabs(files, owner) + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
                                 }
 
                                 for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
@@ -366,6 +428,19 @@ public class Handler
                 }
             }
             user_set.last_comm = comm;
+        }
+
+        else if(comm.contains("cd"))
+        {
+            if (comm.equals("cd"))
+            {
+                output_stream.ous("cd --path_to_file", 0);
+            }
+            else
+            {
+                if (args.size() > 0)
+                pwd = args.get(0);
+            }
         }
 
         else if (comm.contains("help"))
