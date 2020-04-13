@@ -51,6 +51,12 @@ public class Handler
                 "alias: argument doesn't contain delimiter '/', for example - e/exit",
                 };
 
+        String[] ls_log_exceptions =
+                {
+                        "ls: more than one argument",
+                        "alias: argument doesn't contain delimiter '/', for example - e/exit",
+                };
+
         String[] help_log_exceptions =
                 {
                         "help: unknowns argument",
@@ -64,32 +70,72 @@ public class Handler
             File[] files = dir.listFiles();
             String files_str = "", files_list = "";
             File file;
+            boolean checker;
 
-
-            for (int i = 0; i < files.length; i++)
+            if (comm.equals("ls"))
             {
-                files_str = files[i].toString();
-                for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                for (int i = 0; i < files.length; i++)
                 {
-                    file = new File(files_str);
-                    if (file.isDirectory() && file.isHidden() /*files_str.toCharArray()[files_str.lastIndexOf("/") + 1] == '.'*/)
+                    checker = false;
+                    files_str = files[i].toString();
+                    for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
                     {
-                        files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                        file = new File(files_str);
+                        //System.out.println(files_list.toCharArray()[j]);
+                        if ((file.isDirectory() && !file.isHidden()))
+                        {
+                            checker = true;
+                            files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                        }
+                        else if (file.isFile() && !file.isHidden())
+                        {
+                            checker = true;
+                            files_list += files_str.toCharArray()[j];
+                        }
                     }
-                    else if (file.isDirectory())
+                    if (checker)
                     {
-                        files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
-                    }
-                    else
-                    {
-                        files_list += files_str.toCharArray()[j];
+                        files_list += "\n";
                     }
                 }
-                files_list += "\n";
+                output_stream.ous(files_list, 0);
+            }
+            else
+            {
+                if (args.size() > 1)
+                {
+                    output_stream.ous(ls_log_exceptions[0], 2);
+                }
+                else
+                {
+                    if (args.get(0).contains("-a"))
+                    {
+                        for (int i = 0; i < files.length; i++)
+                        {
+                            files_str = files[i].toString();
+                            for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                            {
+                                file = new File(files_str);
+                                if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                {
+                                    files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                                }
+                                else if (file.isDirectory() && !file.isHidden())
+                                {
+                                    files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                                }
+                                else
+                                {
+                                    files_list += files_str.toCharArray()[j];
+                                }
+                            }
+                            files_list += "\n";
+                        }
+                    }
+                    output_stream.ous(files_list, 0);
+                }
             }
 
-
-            output_stream.ous(files_list, 0);
         }
 
         else if (comm.contains("alias"))
