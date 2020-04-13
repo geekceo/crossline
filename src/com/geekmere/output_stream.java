@@ -20,6 +20,10 @@ public class output_stream
                 System.out.println("\u001B[33m" + out + "\u001B[0m");
                 break;
 
+            case 3:
+                System.out.println("\u001B[32m" + out + "\u001B[0m");
+                break;
+
             default:
                 System.out.println(out);
                 break;

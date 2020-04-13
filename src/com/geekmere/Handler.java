@@ -1,6 +1,12 @@
 package com.geekmere;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.UserPrincipal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
@@ -42,7 +48,7 @@ public class Handler
         }
     }
 
-    public static void comm_handler(String comm)
+    public static void comm_handler(String comm) throws IOException
     {
 
         String[] alias_log_exceptions =
@@ -70,6 +76,7 @@ public class Handler
             File[] files = dir.listFiles();
             String files_str = "", files_list = "";
             File file;
+            String owner, read = "", write = "", exec = "";
             boolean checker;
 
             if (comm.equals("ls"))
@@ -108,7 +115,7 @@ public class Handler
                 }
                 else
                 {
-                    if (args.get(0).contains("-a"))
+                    if (args.get(0).equals("-a"))
                     {
                         for (int i = 0; i < files.length; i++)
                         {
@@ -131,8 +138,56 @@ public class Handler
                             }
                             files_list += "\n";
                         }
+                        output_stream.ous(files_list, 0);
                     }
-                    output_stream.ous(files_list, 0);
+
+                    if (args.get(0).equals("-x"))
+                    {
+                        output_stream.ous("owner        type/mod        filename\n", 3);
+                        for (int i = 0; i < files.length; i++)
+                        {
+                            files_str = files[i].toString();
+
+                            file = new File(files_str);
+                            owner = Files.getOwner(Paths.get(files_str)).getName();
+
+                            if (Files.isReadable(Paths.get(files_str))){read="r";}else{read="-";}
+                            if (Files.isWritable(Paths.get(files_str))){write="w";}else{write="-";}
+                            if (Files.isExecutable(Paths.get(files_str))){exec="x";}else{exec="-";}
+
+                            if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                            {
+                                files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                            }
+                            else if (file.isDirectory() && !file.isHidden())
+                            {
+                                files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                            }
+                            else
+                            {
+                                files_list += Colors.GREEN + owner + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
+                            }
+
+                            for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                            {
+                                file = new File(files_str);
+                                if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                {
+                                    files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                                }
+                                else if (file.isDirectory() && !file.isHidden())
+                                {
+                                    files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                                }
+                                else
+                                {
+                                    files_list += Colors.RESET + files_str.toCharArray()[j];
+                                }
+                            }
+                            files_list += "\n";
+                        }
+                        output_stream.ous(files_list, 0);
+                    }
                 }
             }
 
