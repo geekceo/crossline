@@ -1,6 +1,7 @@
 package com.geekmere;
 
 import java.io.*;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class Handler
@@ -44,25 +45,64 @@ public class Handler
     public static void comm_handler(String comm)
     {
 
-        String[] log_exceptions =
+        String[] alias_log_exceptions =
                 {
                 "alias: more than one argument",
                 "alias: argument doesn't contain delimiter '/', for example - e/exit",
                 };
 
+        String[] help_log_exceptions =
+                {
+                        "help: unknowns argument",
+                };
+
         ArrayList<String> args = args_finder(comm);
 
-        if (comm.contains("alias"))
+        if (comm.contains("ls"))
+        {
+            File dir = new File(user_set.pwd);
+            File[] files = dir.listFiles();
+            String files_str = "", files_list = "";
+            File file;
+
+
+            for (int i = 0; i < files.length; i++)
+            {
+                files_str = files[i].toString();
+                for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                {
+                    file = new File(files_str);
+                    if (file.isDirectory() && file.isHidden() /*files_str.toCharArray()[files_str.lastIndexOf("/") + 1] == '.'*/)
+                    {
+                        files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                    }
+                    else if (file.isDirectory())
+                    {
+                        files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                    }
+                    else
+                    {
+                        files_list += files_str.toCharArray()[j];
+                    }
+                }
+                files_list += "\n";
+            }
+
+
+            output_stream.ous(files_list, 0);
+        }
+
+        else if (comm.contains("alias"))
         {
             if (comm.equals("alias"))
             {
-                Main.output("alias -arg", 0);
+                output_stream.ous("alias -arg", 0);
             }
             else
             {
                 if (args.size() > 1)
                 {
-                    Main.output(log_exceptions[0], 1);
+                    output_stream.ous(alias_log_exceptions[0], 2);
                 }
                 else
                 {
@@ -81,38 +121,47 @@ public class Handler
                     }
                     else
                     {
-                        Main.output(log_exceptions[1], 1);
+                        output_stream.ous(alias_log_exceptions[1], 2);
                     }
                 }
             }
             user_set.last_comm = comm;
         }
 
-        if (comm.contains("help"))
+        else if (comm.contains("help"))
         {
             if (comm.equals("help"))
             {
-                Main.output("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020", 0);
+                output_stream.ous("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020", 0);
             }
             else
             {
                 if (args.contains("-p"))
                 {
-                    Main.output("Person - Tagir Khalilov\n(c) GeeMere 2016-2020", 0);
+                    output_stream.ous("Person - Tagir Khalilov\n(c) GeeMere 2016-2020", 0);
+                }
+                else
+                {
+
                 }
             }
             user_set.last_comm = comm;
         }
 
-        if (comm.equals("clear"))
+        else if (comm.equals("clear"))
         {
             user_set.last_comm = "clear";
             clear();
         }
 
-        if (comm.equals("exit"))
+        else if (comm.equals("exit"))
         {
             System.exit(0);
+        }
+
+        else
+        {
+            output_stream.ous(MessageFormat.format("{0}: {1}: command not found", kernel_set.NAME, comm), 1);
         }
     }
 
@@ -120,7 +169,7 @@ public class Handler
     {
         for (int i = 0; i <= 127; i ++)
         {
-            Main.output((char)8 + " " + (char)8, 0);
+            output_stream.ous((char)8 + " " + (char)8, 0);
         }
     }
 

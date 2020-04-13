@@ -44,19 +44,5 @@ public class Main
         Handler.set_handler(comm);
     }
 
-    public static void output(String out, int code)
-    {
-        switch (code)
-        {
-            case 0:
-                System.out.println(out);
-                break;
-
-            case 1:
-                System.out.println("\u001B[31m" + out + "\u001B[0m");
-                break;
-        }
-    }
-
 
 }
