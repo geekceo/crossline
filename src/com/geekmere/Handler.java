@@ -50,7 +50,6 @@ public class Handler
 
     public static void comm_handler(String comm) throws IOException
     {
-
         String[] alias_log_exceptions =
                 {
                 "alias: more than one argument",
@@ -79,117 +78,236 @@ public class Handler
             String owner, read = "", write = "", exec = "";
             boolean checker;
 
-            if (comm.equals("ls"))
+            if (DiffOs.isWindows())
             {
-                for (int i = 0; i < files.length; i++)
+                if (comm.equals("ls"))
                 {
-                    checker = false;
-                    files_str = files[i].toString();
-                    for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                    for (int i = 0; i < files.length; i++)
                     {
-                        file = new File(files_str);
-                        //System.out.println(files_list.toCharArray()[j]);
-                        if ((file.isDirectory() && !file.isHidden()))
+                        checker = false;
+                        files_str = files[i].toString();
+                        for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
                         {
-                            checker = true;
-                            files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                            file = new File(files_str);
+                            //System.out.println(files_list.toCharArray()[j]);
+                            if ((file.isDirectory() && !file.isHidden()))
+                            {
+                                checker = true;
+                                files_list += files_str.toCharArray()[j];
+                            }
+                            else if (file.isFile() && !file.isHidden())
+                            {
+                                checker = true;
+                                files_list += files_str.toCharArray()[j];
+                            }
                         }
-                        else if (file.isFile() && !file.isHidden())
+                        if (checker)
                         {
-                            checker = true;
-                            files_list += files_str.toCharArray()[j];
+                            files_list += "\n";
                         }
                     }
-                    if (checker)
-                    {
-                        files_list += "\n";
-                    }
-                }
-                output_stream.ous(files_list, 0);
-            }
-            else
-            {
-                if (args.size() > 1)
-                {
-                    output_stream.ous(ls_log_exceptions[0], 2);
+                    output_stream.ous(files_list, 0);
                 }
                 else
                 {
-                    if (args.get(0).equals("-a"))
+                    if (args.size() > 1)
                     {
-                        for (int i = 0; i < files.length; i++)
-                        {
-                            files_str = files[i].toString();
-                            for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
-                            {
-                                file = new File(files_str);
-                                if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
-                                {
-                                    files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
-                                }
-                                else if (file.isDirectory() && !file.isHidden())
-                                {
-                                    files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
-                                }
-                                else
-                                {
-                                    files_list += files_str.toCharArray()[j];
-                                }
-                            }
-                            files_list += "\n";
-                        }
-                        output_stream.ous(files_list, 0);
+                        output_stream.ous(ls_log_exceptions[0], 2);
                     }
-
-                    if (args.get(0).equals("-x"))
+                    else
                     {
-                        output_stream.ous("owner        type/mod        filename\n", 3);
-                        for (int i = 0; i < files.length; i++)
+                        if (args.get(0).equals("-a"))
                         {
-                            files_str = files[i].toString();
-
-                            file = new File(files_str);
-                            owner = Files.getOwner(Paths.get(files_str)).getName();
-
-                            if (Files.isReadable(Paths.get(files_str))){read="r";}else{read="-";}
-                            if (Files.isWritable(Paths.get(files_str))){write="w";}else{write="-";}
-                            if (Files.isExecutable(Paths.get(files_str))){exec="x";}else{exec="-";}
-
-                            if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                            for (int i = 0; i < files.length; i++)
                             {
-                                files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                files_str = files[i].toString();
+                                for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                                {
+                                    file = new File(files_str);
+                                    if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                    {
+                                        files_list += files_str.toCharArray()[j];
+                                    }
+                                    else if (file.isDirectory() && !file.isHidden())
+                                    {
+                                        files_list += files_str.toCharArray()[j];
+                                    }
+                                    else
+                                    {
+                                        files_list += files_str.toCharArray()[j];
+                                    }
+                                }
+                                files_list += "\n";
                             }
-                            else if (file.isDirectory() && !file.isHidden())
-                            {
-                                files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
-                            }
-                            else
-                            {
-                                files_list += Colors.GREEN + owner + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
-                            }
+                            output_stream.ous(files_list, 0);
+                        }
 
-                            for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                        if (args.get(0).equals("-x"))
+                        {
+                            output_stream.ous("owner        type/mod        filename\n", 99);
+                            for (int i = 0; i < files.length; i++)
                             {
+                                files_str = files[i].toString();
+
                                 file = new File(files_str);
+                                owner = Files.getOwner(Paths.get(files_str)).getName();
+
+                                if (Files.isReadable(Paths.get(files_str))){read="r";}else{read="-";}
+                                if (Files.isWritable(Paths.get(files_str))){write="w";}else{write="-";}
+                                if (Files.isExecutable(Paths.get(files_str))){exec="x";}else{exec="-";}
+
                                 if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
                                 {
-                                    files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                                    files_list += owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
                                 }
                                 else if (file.isDirectory() && !file.isHidden())
                                 {
-                                    files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                                    files_list += owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
                                 }
                                 else
                                 {
-                                    files_list += Colors.RESET + files_str.toCharArray()[j];
+                                    files_list += owner + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
                                 }
+
+                                for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                                {
+                                    file = new File(files_str);
+                                    if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                    {
+                                        files_list += files_str.toCharArray()[j] + Colors.RESET;
+                                    }
+                                    else if (file.isDirectory() && !file.isHidden())
+                                    {
+                                        files_list += files_str.toCharArray()[j] + Colors.RESET;
+                                    }
+                                    else
+                                    {
+                                        files_list += files_str.toCharArray()[j];
+                                    }
+                                }
+                                files_list += "\n";
                             }
-                            files_list += "\n";
+                            output_stream.ous(files_list, 0);
                         }
-                        output_stream.ous(files_list, 0);
                     }
                 }
             }
+            else
+            {
+                if (comm.equals("ls"))
+                {
+                    for (int i = 0; i < files.length; i++)
+                    {
+                        checker = false;
+                        files_str = files[i].toString();
+                        for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                        {
+                            file = new File(files_str);
+                            //System.out.println(files_list.toCharArray()[j]);
+                            if ((file.isDirectory() && !file.isHidden()))
+                            {
+                                checker = true;
+                                files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                            }
+                            else if (file.isFile() && !file.isHidden())
+                            {
+                                checker = true;
+                                files_list += files_str.toCharArray()[j];
+                            }
+                        }
+                        if (checker)
+                        {
+                            files_list += "\n";
+                        }
+                    }
+                    output_stream.ous(files_list, 0);
+                }
+                else
+                {
+                    if (args.size() > 1)
+                    {
+                        output_stream.ous(ls_log_exceptions[0], 2);
+                    }
+                    else
+                    {
+                        if (args.get(0).equals("-a"))
+                        {
+                            for (int i = 0; i < files.length; i++)
+                            {
+                                files_str = files[i].toString();
+                                for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                                {
+                                    file = new File(files_str);
+                                    if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                    {
+                                        files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                                    }
+                                    else if (file.isDirectory() && !file.isHidden())
+                                    {
+                                        files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                                    }
+                                    else
+                                    {
+                                        files_list += files_str.toCharArray()[j];
+                                    }
+                                }
+                                files_list += "\n";
+                            }
+                            output_stream.ous(files_list, 0);
+                        }
+
+                        if (args.get(0).equals("-x"))
+                        {
+                            output_stream.ous("owner        type/mod        filename\n", 3);
+                            for (int i = 0; i < files.length; i++)
+                            {
+                                files_str = files[i].toString();
+
+                                file = new File(files_str);
+                                owner = Files.getOwner(Paths.get(files_str)).getName();
+
+                                if (Files.isReadable(Paths.get(files_str))){read="r";}else{read="-";}
+                                if (Files.isWritable(Paths.get(files_str))){write="w";}else{write="-";}
+                                if (Files.isExecutable(Paths.get(files_str))){exec="x";}else{exec="-";}
+
+                                if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                {
+                                    files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                }
+                                else if (file.isDirectory() && !file.isHidden())
+                                {
+                                    files_list += Colors.GREEN + owner + MessageFormat.format("            d{0}{1}{2}", read,write,exec) + "        ";
+                                }
+                                else
+                                {
+                                    files_list += Colors.GREEN + owner + MessageFormat.format("            -{0}{1}{2}", read,write,exec) + "        ";
+                                }
+
+                                for (int j = files_str.lastIndexOf("/") + 1; j < files_str.length(); j++)
+                                {
+                                    file = new File(files_str);
+                                    if ((file.isDirectory() && file.isHidden()) || (file.isHidden()))
+                                    {
+                                        files_list += Colors.RED + files_str.toCharArray()[j] + Colors.RESET;
+                                    }
+                                    else if (file.isDirectory() && !file.isHidden())
+                                    {
+                                        files_list += Colors.CYAN + files_str.toCharArray()[j] + Colors.RESET;
+                                    }
+                                    else
+                                    {
+                                        files_list += Colors.RESET + files_str.toCharArray()[j];
+                                    }
+                                }
+                                files_list += "\n";
+                            }
+                            output_stream.ous(files_list, 0);
+                        }
+                    }
+                }
+            }
+
+
 
         }
 
@@ -197,13 +315,27 @@ public class Handler
         {
             if (comm.equals("alias"))
             {
-                output_stream.ous("alias -arg", 0);
+                if (DiffOs.isWindows())
+                {
+                    output_stream.ous("alias -arg", 0);
+                }
+                else
+                {
+                    output_stream.ous("alias -arg", 0);
+                }
             }
             else
             {
                 if (args.size() > 1)
                 {
-                    output_stream.ous(alias_log_exceptions[0], 2);
+                    if (DiffOs.isWindows())
+                    {
+                        output_stream.ous(alias_log_exceptions[0], 0);
+                    }
+                    else
+                    {
+                        output_stream.ous(alias_log_exceptions[0], 2);
+                    }
                 }
                 else
                 {
@@ -222,7 +354,14 @@ public class Handler
                     }
                     else
                     {
-                        output_stream.ous(alias_log_exceptions[1], 2);
+                        if (DiffOs.isWindows())
+                        {
+                            output_stream.ous(alias_log_exceptions[0], 0);
+                        }
+                        else
+                        {
+                            output_stream.ous(alias_log_exceptions[0], 2);
+                        }
                     }
                 }
             }

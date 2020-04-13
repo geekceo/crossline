@@ -13,20 +13,17 @@ public class output_stream
                 break;
 
             case 1:
-                System.out.println("\u001B[31m" + out + "\u001B[0m");
+                System.out.println(Colors.RED + out + Colors.RESET);
                 break;
 
             case 2:
-                System.out.println("\u001B[33m" + out + "\u001B[0m");
+                System.out.println(Colors.YELLOW + out + Colors.RESET);
                 break;
 
             case 3:
-                System.out.println("\u001B[32m" + out + "\u001B[0m");
+                System.out.println(Colors.GREEN + out + Colors.RESET);
                 break;
 
-            default:
-                System.out.println(out);
-                break;
         }
 
         return output;
