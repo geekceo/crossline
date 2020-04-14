@@ -111,6 +111,13 @@ public class Handler
                         "write: more than one argument"
                 };
 
+        String[] read_log_exceptions =
+                {
+                        "read: more than one argument",
+                        "read: file not found",
+                        "read: not a file"
+                };
+
         String[] ls_log_exceptions =
                 {
                         "ls: more than one argument",
@@ -435,6 +442,7 @@ public class Handler
             user_set.last_comm = comm;
         }
 
+        //TODO RELATIVE PATH
         else if(comm.contains("cd"))
         {
             if (comm.equals("cd"))
@@ -446,6 +454,7 @@ public class Handler
                 if (args.size() > 0)
                 pwd = args.get(0);
             }
+            user_set.last_comm = comm;
         }
 
         else if(comm.contains("write"))
@@ -458,7 +467,7 @@ public class Handler
                 }
                 else
                 {
-                    output_stream.ous("write -arg, for example: write Hello, World!", 0);
+                    output_stream.ous("write -arg, for example: write Hello, World!", 2);
                 }
             }
             else
@@ -479,6 +488,43 @@ public class Handler
                     output_stream.ous(args.get(0), 0);
                 }
             }
+            user_set.last_comm = comm;
+        }
+
+        else if(comm.contains("read"))
+        {
+            String content;
+            if (comm.equals("read"))
+            {
+                if (DiffOs.isWindows())
+                {
+                    output_stream.ous("read -arg, for example: read file.txt", 0);
+                }
+                else
+                {
+                    output_stream.ous("read -arg, for example: read file.txt", 2);
+                }
+            }
+            else
+            {
+                if (args.size() > 1)
+                {
+                    if (DiffOs.isWindows())
+                    {
+                        output_stream.ous(read_log_exceptions[0], 0);
+                    }
+                    else
+                    {
+                        output_stream.ous(read_log_exceptions[0], 2);
+                    }
+                }
+                else
+                {
+                    content = input_stream.read_file(args.get(0));
+                    new output_stream(content, 0);
+                }
+            }
+
             user_set.last_comm = comm;
         }
 
@@ -527,6 +573,7 @@ public class Handler
         }
     }
 
+    //TODO 'WRITE' IN FILE
     public static ArrayList<String> args_finder(String request)
     {
         String arg;
