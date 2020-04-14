@@ -7,12 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f8ef55fb-9f61-41dc-9b9d-ce599768f54c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/claus.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/claus.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/CrossLine_jar/CrossLine.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/CrossLine_jar/CrossLine.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/geekmere/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/geekmere/Handler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/geekmere/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/geekmere/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/geekmere/user_set.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/geekmere/user_set.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/geekmere/output_stream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/geekmere/output_stream.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,26 +92,30 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="411" y="170" width="525" height="425" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1586626374215" />
-    <state width="1320" height="185" key="GridCell.Tab.0.bottom" timestamp="1586801013754">
+    <state width="1320" height="185" key="GridCell.Tab.0.bottom" timestamp="1586900947074">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1320" height="185" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1586801013754" />
-    <state width="1320" height="185" key="GridCell.Tab.0.center" timestamp="1586801013753">
+    <state width="1320" height="185" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1586900947074" />
+    <state width="1320" height="185" key="GridCell.Tab.0.center" timestamp="1586900947074">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1320" height="185" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1586801013753" />
-    <state width="1320" height="185" key="GridCell.Tab.0.left" timestamp="1586801013753">
+    <state width="1320" height="185" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1586900947074" />
+    <state width="1320" height="185" key="GridCell.Tab.0.left" timestamp="1586900947074">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1320" height="185" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1586801013753" />
-    <state width="1320" height="185" key="GridCell.Tab.0.right" timestamp="1586801013753">
+    <state width="1320" height="185" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1586900947074" />
+    <state width="1320" height="185" key="GridCell.Tab.0.right" timestamp="1586900947074">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1320" height="185" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1586801013753" />
+    <state width="1320" height="185" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1586900947074" />
     <state x="166" y="0" width="1024" height="766" key="SettingsEditor" timestamp="1586626380113">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="166" y="0" width="1024" height="766" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1586626380113" />
+    <state x="58" y="0" width="1239" height="766" key="new project wizard" timestamp="1586818870143">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="58" y="0" width="1239" height="766" key="new project wizard/0.0.1366.768@0.0.1366.768" timestamp="1586818870143" />
     <state x="347" y="169" key="run.anything.popup" timestamp="1586769987536">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

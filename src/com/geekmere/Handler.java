@@ -106,15 +106,20 @@ public class Handler
                 "alias: argument doesn't contain delimiter '/', for example - e/exit",
                 };
 
+        String[] write_log_exceptions =
+                {
+                        "write: more than one argument"
+                };
+
         String[] ls_log_exceptions =
                 {
                         "ls: more than one argument",
-                        "alias: argument doesn't contain delimiter '/', for example - e/exit",
+                        "ls: argument doesn't contain delimiter '/', for example - e/exit",
                 };
 
         String[] help_log_exceptions =
                 {
-                        "help: unknowns argument",
+                        "help: unknowns argument"
                 };
 
         ArrayList<String> args = args_finder(comm);
@@ -443,6 +448,40 @@ public class Handler
             }
         }
 
+        else if(comm.contains("write"))
+        {
+            if (comm.equals("write"))
+            {
+                if (DiffOs.isWindows())
+                {
+                    output_stream.ous("write -arg, for example: write Hello, World!", 0);
+                }
+                else
+                {
+                    output_stream.ous("write -arg, for example: write Hello, World!", 0);
+                }
+            }
+            else
+            {
+                if (args.size() > 1)
+                {
+                    if (DiffOs.isWindows())
+                    {
+                        output_stream.ous(write_log_exceptions[0], 0);
+                    }
+                    else
+                    {
+                        output_stream.ous(write_log_exceptions[0], 2);
+                    }
+                }
+                else
+                {
+                    output_stream.ous(args.get(0), 0);
+                }
+            }
+            user_set.last_comm = comm;
+        }
+
         else if (comm.contains("help"))
         {
             if (comm.equals("help"))
@@ -494,32 +533,66 @@ public class Handler
         char[] req_char = request.toCharArray();
         ArrayList<String> args = new ArrayList<String>();
 
-        for (int i = 0; i < request.length(); i++)
+        if (!request.contains("write"))
         {
-            arg = "";
-            try
+            for (int i = 0; i < request.length(); i++)
             {
-                if (req_char[i] == ' ' &&  req_char[i+1] != ' ')
+                arg = "";
+                try
                 {
-                    for (int j = i + 1; j < request.length(); j++)
+                    if (req_char[i] == ' ' &&  req_char[i+1] != ' ')
                     {
-                        if (req_char[j] == ' ')
+                        for (int j = i + 1; j < request.length(); j++)
                         {
-                            break;
+                            if (req_char[j] == ' ')
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                arg += req_char[j];
+                            }
                         }
-                        else
-                        {
-                            arg += req_char[j];
-                        }
+                        args.add(arg);
                     }
-                    args.add(arg);
+                }
+                catch (Exception e)
+                {
+                    //e.printStackTrace();
                 }
             }
-            catch (Exception e)
+        }
+        else
+        {
+            for (int i = 0; i < request.length(); i++)
             {
-                //e.printStackTrace();
+                arg = "";
+                try
+                {
+                    if (req_char[i] == ' ' &&  req_char[i+1] != ' ')
+                    {
+                        for (int j = i + 1; j < request.length(); j++)
+                        {
+                            if ((req_char[j] == ' ' && req_char[j+1] == '>') || req_char[j] == '>')
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                arg += req_char[j];
+                            }
+                        }
+                        args.add(arg);
+                        break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //e.printStackTrace();
+                }
             }
         }
+
         return args;
     }
 }

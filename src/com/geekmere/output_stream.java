@@ -4,7 +4,6 @@ public class output_stream
 {
     public static String ous(String out, int code)
     {
-        String output = "";
 
         switch (code)
         {
@@ -26,6 +25,6 @@ public class output_stream
 
         }
 
-        return output;
+        return out;
     }
 }
