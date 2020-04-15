@@ -111,6 +111,11 @@ public class Handler
                         "write: more than one argument"
                 };
 
+        String[] cd_log_exceptions =
+                {
+                        "cd: not a directory"
+                };
+
         String[] read_log_exceptions =
                 {
                         "read: more than one argument",
@@ -451,8 +456,61 @@ public class Handler
             }
             else
             {
-                if (args.size() > 0)
-                pwd = args.get(0);
+
+                if (DiffOs.isWindows())
+                {
+                    if (args.size() > 0)
+                    {
+                        Path rel_path = Paths.get(pwd + "\\" + args.get(0));
+                        Path abs_path = Paths.get("\\" + args.get(0));
+                        if (Files.isDirectory(rel_path))
+                        {
+                            if (args.get(0).toCharArray()[0]!='\\')
+                            {
+                                pwd = "\\" +  args.get(0);
+                            }
+                            else
+                            {
+                                pwd = args.get(0);
+                            }
+                        }
+                        else if(Files.isDirectory(abs_path))
+                        {
+                            if (args.get(0).toCharArray()[0]!='/')
+                            {
+                                pwd = "/" +  args.get(0);
+                            }
+                            else
+                            {
+                                pwd = args.get(0);
+                            }
+                        }
+                        else
+                        {
+                            output_stream.ous(cd_log_exceptions[0], 0);
+                        }
+                    }
+                }
+                else
+                {
+                    if (args.size() > 0)
+                    {
+                        Path rel_path = Paths.get(pwd + "/" + args.get(0));
+                        Path abs_path = Paths.get("/" + args.get(0));
+                        if (Files.isDirectory(rel_path))
+                        {
+                            pwd += "/" + args.get(0);
+                        }
+                        else if(Files.isDirectory(abs_path))
+                        {
+                            pwd = args.get(0);
+                        }
+                        else
+                        {
+                            output_stream.ous(cd_log_exceptions[0], 1);
+                        }
+                    }
+                }
             }
             user_set.last_comm = comm;
         }
@@ -567,12 +625,6 @@ public class Handler
 
     public static void clear()
     {
-        /*for (int i = 0; i <= 127; i ++)
-        {
-            output_stream.ous((char)8 + " " + (char)8, 0);
-        }*/
-        /*String command = (DiffOs.isWindows()) ? "cls" : "clear";
-        */
         if(DiffOs.isWindows())
         {
             try {
