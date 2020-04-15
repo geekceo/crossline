@@ -567,9 +567,24 @@ public class Handler
 
     public static void clear()
     {
-        for (int i = 0; i <= 127; i ++)
+        /*for (int i = 0; i <= 127; i ++)
         {
             output_stream.ous((char)8 + " " + (char)8, 0);
+        }*/
+        /*String command = (DiffOs.isWindows()) ? "cls" : "clear";
+        */
+        if(DiffOs.isWindows())
+        {
+            try {
+                Runtime.getRuntime().exec("cls");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
         }
     }
 
