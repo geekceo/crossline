@@ -10,12 +10,20 @@ import java.nio.file.attribute.UserPrincipal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
-
+/* COMMANDS
+* cd - Переход пути
+* ls - вывод файлов в директории
+* alias - создает в файле конфигурации сокращенные команды
+* read - чтение из файла и вывод содержимого на экран
+* write - аналог echo
+* upl - Uniform Packet Loader - загрузчик пакетов приложений
+*/
 
 public class Handler
 {
 
     public static String pwd = user_set.home_dir;
+    private static final String PATTERN = "%s\r";
 
     public static void set_handler(String comm) throws IOException
     {
@@ -127,6 +135,12 @@ public class Handler
                 {
                         "ls: more than one argument",
                         "ls: argument doesn't contain delimiter '/', for example - e/exit",
+                };
+
+        String[] upl_log_exceptions =
+                {
+                        "upl: wrong argument",
+                        "upl: argument doesn't contain delimiter '/', for example - e/exit",
                 };
 
         String[] help_log_exceptions =
@@ -397,6 +411,77 @@ public class Handler
 
         }
 
+        else if (comm.contains("upl"))
+        {
+            if (comm.equals("upl"))
+            {
+                if (DiffOs.isWindows())
+                {
+                    output_stream.ous("upl -arg1 -arg2", 0);
+                }
+                else
+                {
+                    output_stream.ous("upl -arg1 -arg2", 0);
+                }
+            }
+            else
+            {
+                if (args.size() > 2)
+                {
+                    if (DiffOs.isWindows())
+                    {
+                        output_stream.ous(upl_log_exceptions[0], 0);
+                    }
+                    else
+                    {
+                        output_stream.ous(upl_log_exceptions[0], 2);
+                    }
+                }
+                else
+                {
+                    if ((args.get(0).contains("list")) && (args.size() == 1))
+                    {
+                        output_stream.ous("Список доступных пакетов:", 0);
+                    }
+                    if ((args.get(0).contains("install")) && (args.size() == 1))
+                    {
+                        output_stream.ous("Введите имя пакета для установки", 0);
+                    }
+                    else if ((args.get(0).contains("install")) && (args.size() == 2))
+                    {
+                        if (DiffOs.isWindows())
+                        {
+                            String prog = "=";
+                            for (int i = 1; i <= 10; i++) {
+                                System.out.format("Загрузка[" + PATTERN, prog);
+                                prog += "=]";
+                                try {
+                                    Thread.sleep(900);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            //output_stream.ous("Установка пакета", 0);
+                        }
+                        else
+                        {
+                            String prog = "=";
+                            for (int i = 1; i <= 10; i++) {
+                                System.out.format("Загрузка " + PATTERN, prog);
+                                prog += "=";
+                                try {
+                                    Thread.sleep(900);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            user_set.last_comm = comm;
+        }
+
         else if (comm.contains("alias"))
         {
             if (comm.equals("alias"))
@@ -600,13 +685,13 @@ public class Handler
         {
             if (comm.equals("help"))
             {
-                output_stream.ous("CrossLine - it's crossplatform command interface.\n(c) GeeMere 2016-2020", 0);
+                output_stream.ous("CrossLine - it's crossplatform command interface.\n(c) GeekMere 2016-2020", 0);
             }
             else
             {
                 if (args.contains("-p"))
                 {
-                    output_stream.ous("Person - Tagir Khalilov\n(c) GeeMere 2016-2020", 0);
+                    output_stream.ous("Person - Tagir Khalilov\n(c) GeekMere 2016-2020", 0);
                 }
                 else
                 {
