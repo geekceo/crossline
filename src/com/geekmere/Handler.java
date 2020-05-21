@@ -443,11 +443,11 @@ public class Handler
                 {
                     if ((args.get(0).contains("list")) && (args.size() == 1))
                     {
-                        output_stream.ous("Список доступных пакетов:", 0);
+                        output_stream.ous("Packet list:", 0);
                     }
                     if ((args.get(0).contains("install")) && (args.size() == 1))
                     {
-                        output_stream.ous("Введите имя пакета для установки", 0);
+                        output_stream.ous("Write name of packet", 0);
                     }
                     else if ((args.get(0).contains("install")) && (args.size() == 2))
                     {
@@ -460,6 +460,7 @@ public class Handler
                         {
                             //output_stream.ous("\n",0);
                             downThread.start();
+                            while (downThread.isAlive()){}
                         }
                     }
                 }
