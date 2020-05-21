@@ -108,6 +108,8 @@ public class Handler
 
     public static void comm_handler(String comm) throws IOException
     {
+        DownThread downThread = new DownThread();
+
         String[] alias_log_exceptions =
                 {
                 "alias: more than one argument",
@@ -451,30 +453,13 @@ public class Handler
                     {
                         if (DiffOs.isWindows())
                         {
-                            String prog = "=";
-                            for (int i = 1; i <= 10; i++) {
-                                System.out.format("Загрузка[" + PATTERN, prog);
-                                prog += "=]";
-                                try {
-                                    Thread.sleep(900);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                            downThread.start();
                             //output_stream.ous("Установка пакета", 0);
                         }
                         else
                         {
-                            String prog = "=";
-                            for (int i = 1; i <= 10; i++) {
-                                System.out.format("Загрузка " + PATTERN, prog);
-                                prog += "=";
-                                try {
-                                    Thread.sleep(900);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                            //output_stream.ous("\n",0);
+                            downThread.start();
                         }
                     }
                 }
@@ -714,7 +699,8 @@ public class Handler
 
         else
         {
-            output_stream.ous(MessageFormat.format("{0}: {1}: command not found", kernel_set.NAME, comm), 1);
+            if (!comm.isEmpty())
+                output_stream.ous(MessageFormat.format("{0}: {1}: command not found", kernel_set.NAME, comm), 1);
         }
     }
 
@@ -803,5 +789,23 @@ public class Handler
         }
 
         return args;
+    }
+
+    public static class DownThread extends Thread {
+        public void run() {
+            String prog = "=";
+            System.out.println();
+            for (int i = 1; i <= 10; i++) {
+                System.out.format("Download " + i*10 + "%% " + PATTERN, prog);
+                prog += "=";
+                try {
+                    Thread.sleep(900);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            output_stream.ous("\nDownload success", 2);
+            String[] a = {"g"};
+        }
     }
 }
