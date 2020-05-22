@@ -3,6 +3,10 @@ package com.geekmere;
 import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -108,6 +112,7 @@ public class Handler
 
     public static void comm_handler(String comm) throws IOException
     {
+        String[] command = comm.split(" ");
         DownThread downThread = new DownThread();
 
         String[] alias_log_exceptions =
@@ -152,7 +157,7 @@ public class Handler
 
         ArrayList<String> args = args_finder(comm);
 
-        if (comm.contains("ls"))
+        if (command[0].equals("ls"))
         {
             File dir = new File(pwd);
             File[] files = dir.listFiles();
@@ -413,7 +418,7 @@ public class Handler
 
         }
 
-        else if (comm.contains("upl"))
+        else if (command[0].equals("upl"))
         {
             if (comm.equals("upl"))
             {
@@ -443,7 +448,9 @@ public class Handler
                 {
                     if ((args.get(0).contains("list")) && (args.size() == 1))
                     {
+                        String[] packet_list = {"Sublime3"};
                         output_stream.ous("Packet list:", 0);
+                        output_stream.ous(packet_list[0], 0);
                     }
                     if ((args.get(0).contains("install")) && (args.size() == 1))
                     {
@@ -454,11 +461,10 @@ public class Handler
                         if (DiffOs.isWindows())
                         {
                             downThread.start();
-                            //output_stream.ous("Установка пакета", 0);
                         }
                         else
                         {
-                            //output_stream.ous("\n",0);
+                            //output_stream.ous("Packet is Loading", 0);
                             downThread.start();
                             while (downThread.isAlive()){}
                         }
@@ -468,7 +474,7 @@ public class Handler
             user_set.last_comm = comm;
         }
 
-        else if (comm.contains("alias"))
+        else if (command[0].equals("alias"))
         {
             if (comm.equals("alias"))
             {
@@ -526,7 +532,7 @@ public class Handler
         }
 
         //TODO RELATIVE PATH
-        else if(comm.contains("cd"))
+        else if(command[0].equals("cd"))
         {
             if (comm.equals("cd"))
             {
@@ -593,7 +599,7 @@ public class Handler
             user_set.last_comm = comm;
         }
 
-        else if(comm.contains("write"))
+        else if(command[0].equals("write"))
         {
             if (comm.equals("write"))
             {
@@ -630,7 +636,7 @@ public class Handler
             user_set.last_comm = comm;
         }
 
-        else if(comm.contains("read"))
+        else if(command[0].equals("read"))
         {
             String content;
             if (comm.equals("read"))
@@ -667,7 +673,7 @@ public class Handler
             user_set.last_comm = comm;
         }
 
-        else if (comm.contains("help"))
+        else if (command[0].equals("help"))
         {
             if (comm.equals("help"))
             {
@@ -687,13 +693,13 @@ public class Handler
             user_set.last_comm = comm;
         }
 
-        else if (comm.equals("clear"))
+        else if (command[0].equals("clear"))
         {
             user_set.last_comm = "clear";
             clear();
         }
 
-        else if (comm.equals("exit"))
+        else if (command[0].equals("exit"))
         {
             System.exit(0);
         }
@@ -795,18 +801,61 @@ public class Handler
     public static class DownThread extends Thread {
         public void run() {
             String prog = "=";
+            String[] loading = {"/","-","\\","|"};
+            int load_count = 0;
             System.out.println();
-            for (int i = 1; i <= 10; i++) {
-                System.out.format("Download " + i*10 + "%% " + PATTERN, prog);
-                prog += "=";
-                try {
-                    Thread.sleep(900);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            long packet_size = DownloadPacket();
+            if (packet_size >= 0)
+            {
+                System.out.println("GET c" +
+                        " [OK]");
+                System.out.println("Size: " + packet_size + " Bytes");
+
+                for (int i = 0; i <= 9; i++) {
+                    if (load_count == 3)
+                        load_count = 0;
+                    System.out.print("[" +(i+1)*10 + "%]");
+                    System.out.format("   Download " + "[" + loading[load_count] + "] " + PATTERN, prog);
+                    prog += "=";
+                    try {
+                        Thread.sleep(900);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    load_count++;
                 }
+                output_stream.ous("\nDownload success", 2);
+                String[] a = {"g"};
             }
-            output_stream.ous("\nDownload success", 2);
-            String[] a = {"g"};
+            else
+            {
+                System.out.println("GET https://download.sublimetext.com/sublime_text_3_build_3211_x64.tar.bz2 [ERROR]");
+                System.out.println("No connection!");
+            }
         }
+    }
+
+    public static long DownloadPacket()
+    {
+        long removeFileSize = 0;
+        URL url = null;
+        try {
+            url = new URL("https://download.sublimetext.com/sublime_text_3_build_3211_x64.tar.bz2");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection httpConnection = null;
+        try {
+            httpConnection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            httpConnection.setRequestMethod("HEAD");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+        removeFileSize = httpConnection.getContentLengthLong();
+        return removeFileSize;
     }
 }
