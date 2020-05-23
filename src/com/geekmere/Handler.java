@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.UserPrincipal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /* COMMANDS
 * cd - Переход пути
@@ -28,6 +29,7 @@ public class Handler
 
     public static String pwd = user_set.home_dir;
     private static final String PATTERN = "%s\r";
+    public static String now_pack;
 
     public static void set_handler(String comm) throws IOException
     {
@@ -446,11 +448,17 @@ public class Handler
                 }
                 else
                 {
+                    String pack_file = input_stream.read_file(user_set.home_dir + "/upl_pack.cl");
+                    String[] pack_rep = pack_file.split("\n");
                     if ((args.get(0).contains("list")) && (args.size() == 1))
                     {
-                        String[] packet_list = {"Sublime3"};
                         output_stream.ous("Packet list:", 0);
-                        output_stream.ous(packet_list[0], 0);
+
+                        for (int i = 0; i < pack_rep.length; i++)
+                        {
+                            //output_stream.ous(pack_rep[i].split(";")[1], 0);
+                            System.out.println(pack_rep[i].split(";")[1]);
+                        }
                     }
                     if ((args.get(0).contains("install")) && (args.size() == 1))
                     {
@@ -464,9 +472,26 @@ public class Handler
                         }
                         else
                         {
+                            boolean check = false;
+                            for (int i = 0; i < pack_rep.length; i++)
+                            {
+                                if (args.get(1).equals(pack_rep[i].split(";")[1]))
+                                {
+                                    now_pack = pack_rep[i].split(";")[0];
+                                    check = true;
+                                    break;
+                                }
+                            }
                             //output_stream.ous("Packet is Loading", 0);
-                            downThread.start();
-                            while (downThread.isAlive()){}
+                            if (check)
+                            {
+                                downThread.start();
+                                while (downThread.isAlive()){}
+                            }
+                            else
+                            {
+                                output_stream.ous("Packet does not exist", 0);
+                            }
                         }
                     }
                 }
@@ -807,8 +832,7 @@ public class Handler
             long packet_size = DownloadPacket();
             if (packet_size >= 0)
             {
-                System.out.println("GET c" +
-                        " [OK]");
+                System.out.println("GET " + now_pack + " [OK]");
                 System.out.println("Size: " + packet_size + " Bytes");
 
                 for (int i = 0; i <= 9; i++) {
@@ -829,7 +853,7 @@ public class Handler
             }
             else
             {
-                System.out.println("GET https://download.sublimetext.com/sublime_text_3_build_3211_x64.tar.bz2 [ERROR]");
+                System.out.println("GET" + now_pack + "[ERROR]");
                 System.out.println("No connection!");
             }
         }
@@ -840,7 +864,7 @@ public class Handler
         long removeFileSize = 0;
         URL url = null;
         try {
-            url = new URL("https://download.sublimetext.com/sublime_text_3_build_3211_x64.tar.bz2");
+            url = new URL(now_pack);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
