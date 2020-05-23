@@ -30,6 +30,7 @@ public class Handler
     public static String pwd = user_set.home_dir;
     private static final String PATTERN = "%s\r";
     public static String now_pack;
+    public static boolean already_pack = false;
 
     public static void set_handler(String comm) throws IOException
     {
@@ -825,20 +826,30 @@ public class Handler
 
     public static class DownThread extends Thread {
         public void run() {
-            String prog = "=";
-            String[] loading = {"/","-","\\","|"};
-            int load_count = 0;
             System.out.println();
-            long packet_size = DownloadPacket();
+            long packet_size = SizePacket();
             if (packet_size >= 0)
             {
                 System.out.println("GET " + now_pack + " [OK]");
                 System.out.println("Size: " + packet_size + " Bytes");
 
-                for (int i = 0; i <= 9; i++) {
+                File pack_dir = new File(user_set.home_dir + "/upl_packs/");
+                if (!pack_dir.exists())
+                {
+                    pack_dir.mkdir();
+                }
+
+                DownPack dp = new DownPack();
+                dp.start();
+                File df = new File(user_set.home_dir + "/upl_packs/" + Paths.get(now_pack).getFileName());
+                String prog = "=";
+                String[] loading = {"/","-","\\","|"};
+                int load_count = 0;
+                while(df.length() != SizePacket())
+                {
                     if (load_count == 3)
                         load_count = 0;
-                    System.out.print("[" +(i+1)*10 + "%]");
+                    //System.out.print("[" +(i+1)*10 + "%]");
                     System.out.format("   Download " + "[" + loading[load_count] + "] " + PATTERN, prog);
                     prog += "=";
                     try {
@@ -848,6 +859,7 @@ public class Handler
                     }
                     load_count++;
                 }
+
                 output_stream.ous("\nDownload success", 2);
                 String[] a = {"g"};
             }
@@ -859,7 +871,32 @@ public class Handler
         }
     }
 
-    public static long DownloadPacket()
+    public static class DownPack extends Thread {
+        public void run() {
+            File df = new File(user_set.home_dir + "/upl_packs/" + Paths.get(now_pack).getFileName());
+
+            URL url = null;
+            try {
+                url = new URL(now_pack);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            InputStream inputStream = null;
+            try {
+                inputStream = url.openStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                Files.copy(inputStream, df.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public static long SizePacket()
     {
         long removeFileSize = 0;
         URL url = null;
