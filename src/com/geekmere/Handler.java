@@ -862,6 +862,7 @@ public class Handler
 
                 output_stream.ous("\nDownload success", 2);
                 String[] a = {"g"};
+                FileManager.openFile(df.toString());
             }
             else
             {
@@ -885,12 +886,12 @@ public class Handler
             try {
                 inputStream = url.openStream();
             } catch (IOException e) {
-                e.printStackTrace();
+                output_stream.ous("Rep doesn't accessible" ,0);
             }
             try {
                 Files.copy(inputStream, df.toPath());
             } catch (IOException e) {
-                e.printStackTrace();
+                output_stream.ous("Packet has already been downloaded" ,0);
             }
 
         }
